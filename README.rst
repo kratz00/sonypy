@@ -7,9 +7,7 @@ Scott Torborg - `Cart Logic <http://www.cartlogic.com>`_
 Installation
 ============
 
-Install with pip::
-
-    $ pip install sonypy
+    $ python setup.py install
 
 
 Quick Start
