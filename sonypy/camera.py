@@ -299,7 +299,7 @@ class Camera(RawCamera):
     def get_event_mapped(self, long_poll):
         """
         Wraps the getEvent call to parse the result and make it possible to
-        look up values diretly. Specifically:
+        look up values directly. Specifically:
 
         The raw result value is a list of dict, where each dict includes a
         'type' key. Rearrange the list into a dict, where each top-level key
