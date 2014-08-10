@@ -49,7 +49,7 @@ class Discoverer(object):
             headers[key.lower()] = val
         return headers
 
-    def _ssdp_discover(self, timeout=1):
+    def _ssdp_discover(self, timeout=1, ip=None):
         socket.setdefaulttimeout(timeout)
 
         sock = socket.socket(socket.AF_INET,
@@ -61,6 +61,11 @@ class Discoverer(object):
         sock.setsockopt(socket.IPPROTO_IP,
                         socket.IP_MULTICAST_TTL,
                         2)
+        if ip:
+            sock.setsockopt(socket.IPPROTO_IP,
+                            socket.IP_MULTICAST_IF,
+                            socket.inet_aton(ip))
+
         for _ in xrange(2):
             msg = discovery_msg % (SSDP_ADDR, SSDP_PORT, SSDP_MX)
             sock.sendto(msg, (SSDP_ADDR, SSDP_PORT))
@@ -95,9 +100,9 @@ class Discoverer(object):
         services = self._parse_device_definition(r.text)
         return services['camera']
 
-    def discover(self):
+    def discover(self, ip=None):
         endpoints = []
-        for resp in self._ssdp_discover():
+        for resp in self._ssdp_discover(ip=ip):
             url = resp['location']
             endpoint = self._read_device_definition(url)
             endpoints.append(endpoint)
