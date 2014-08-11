@@ -30,13 +30,14 @@ class RawCamera(object):
                     version=self.version)
         data = json.dumps(body)
         r = requests.post(self.endpoint, data=data)
-        resp = r.json
+        resp = r.json()
         assert resp['id'] == 1
-        error = resp.get('error')
-        if error:
-            self._handle_error(error)
-        else:
+        if 'error' in resp:
+            self._handle_error(resp['error'])
+        elif 'results' in resp:
             return resp['results']
+        else:
+            return resp['result']
 
     def _handle_error(self, error):
         raise CameraError(*error)
@@ -127,7 +128,7 @@ class RawCamera(object):
         """
         Stop liveview stream.
         """
-        result = self._do_request('stopLiveView')
+        result = self._do_request('stopLiveview')
         assert result == [0]
 
     def act_zoom(self, direction, movement):
@@ -254,13 +255,13 @@ class RawCamera(object):
         """
         return self._do_request('getVersions')
 
-    def get_method_types(self):
+    def get_method_types(self, version=""):
         """
         Get supported APIs for this version. This differs from
         .get_available_api_list() in that it includes parameter and version
         information with each method name.
         """
-        return self._do_request('getMethodTypes')
+        return self._do_request('getMethodTypes', version)
 
     def _decode_common_header(self, buf):
         start, ptype, seq, timestamp = struct.unpack('BBHI', buf)

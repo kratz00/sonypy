@@ -19,16 +19,12 @@ discovery_msg = ('M-SEARCH * HTTP/1.1\r\n'
                  '\r\n')
 
 
-dd_regex = ('<av:X_ScalarWebAPI_Service>'
-            '\s*'
-            '<av:X_ScalarWebAPI_ServiceType>'
-            '(.+)'
+dd_regex = ('<av:X_ScalarWebAPI_ServiceType>'
+            '(.+?)'
             '</av:X_ScalarWebAPI_ServiceType>'
             '<av:X_ScalarWebAPI_ActionList_URL>'
-            '(.+)'
-            '</av:X_ScalarWebAPI_ActionList_URL>'
-            '\s*'
-            '</av:X_ScalarWebAPI_Service>')
+            '(.+?)'
+            '</av:X_ScalarWebAPI_ActionList_URL>')
 
 
 class Discoverer(object):
@@ -41,7 +37,7 @@ class Discoverer(object):
                 yield addr
 
     def _parse_ssdp_response(self, data):
-        lines = data.split('\n')
+        lines = data.rstrip('\r\n').split('\r\n')
         assert lines[0] == 'HTTP/1.1 200 OK'
         headers = {}
         for line in lines[1:]:
@@ -86,9 +82,9 @@ class Discoverer(object):
         """
         services = {}
         for m in re.findall(dd_regex, doc):
-            service_name = m.group(1)
-            endpoint = m.group(2)
-            services[service_name] = endpoint
+            service_name = m[0]
+            endpoint = m[1]
+            services[service_name] = endpoint + '/' + service_name
         return services
 
     def _read_device_definition(self, url):
