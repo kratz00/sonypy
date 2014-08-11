@@ -64,7 +64,7 @@ class RawCamera(object):
         """
         Get a list of supported shooting modes.
         """
-        result = self._do_request('getSuppoedShootMode')
+        result = self._do_request('getSupportedShootMode')
         return result[0]
 
     def get_available_shoot_mode(self):
