@@ -30,12 +30,6 @@ dd_regex = ('<av:X_ScalarWebAPI_ServiceType>'
 class Discoverer(object):
     camera_class = Camera
 
-    def _interface_addresses(family=socket.AF_INET):
-        for info in socket.getaddrinfo('', None):
-            if family == info[0]:
-                addr = info[-1]
-                yield addr
-
     def _parse_ssdp_response(self, data):
         lines = data.rstrip('\r\n').split('\r\n')
         assert lines[0] == 'HTTP/1.1 200 OK'
