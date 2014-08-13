@@ -91,9 +91,10 @@ class Discoverer(object):
         return services['camera']
 
     def discover(self, ip=None):
-        endpoints = []
+        cameras = []
         for resp in self._ssdp_discover(ip=ip):
             url = resp['location']
             endpoint = self._read_device_definition(url)
-            endpoints.append(endpoint)
-        return [self.camera_class(endpoint) for endpoint in endpoints]
+            camera = self.camera_class(endpoint)
+            cameras.append(camera)
+        return cameras
