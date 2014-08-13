@@ -48,7 +48,7 @@ class RawCamera(object):
         """
         valid_modes = ('still', 'movie', 'audio')
         if mode not in valid_modes:
-            raise ValueError('mode must be one of %r' % valid_modes)
+            raise ValueError('mode must be one of {0!r}'.format(valid_modes))
         result = self._do_request('setShootMode', mode)
         assert result == [0], "unexpected result"
 
