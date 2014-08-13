@@ -39,7 +39,8 @@ class RawCamera(object):
         else:
             return resp['result']
 
-    def _handle_error(self, error):
+    @staticmethod
+    def _handle_error(error):
         raise CameraError(*error)
 
     def set_shoot_mode(self, mode):
@@ -263,11 +264,13 @@ class RawCamera(object):
         """
         return self._do_request('getMethodTypes', version)
 
-    def _decode_common_header(self, buf):
+    @staticmethod
+    def _decode_common_header(buf):
         start, ptype, seq, timestamp = struct.unpack('BBHI', buf)
         return seq, timestamp
 
-    def _decode_payload_header(self, buf):
+    @staticmethod
+    def _decode_payload_header(buf):
         format = 'IBBBBIB'
         buf = buf[:struct.calcsize(format)]
         d = struct.unpack(format, buf)

@@ -30,7 +30,8 @@ dd_regex = ('<av:X_ScalarWebAPI_ServiceType>'
 class Discoverer(object):
     camera_class = Camera
 
-    def _parse_ssdp_response(self, data):
+    @staticmethod
+    def _parse_ssdp_response(data):
         lines = data.rstrip('\r\n').split('\r\n')
         assert lines[0] == 'HTTP/1.1 200 OK'
         headers = {}
@@ -70,7 +71,8 @@ class Discoverer(object):
             print(data)
             yield self._parse_ssdp_response(data)
 
-    def _parse_device_definition(self, doc):
+    @staticmethod
+    def _parse_device_definition(doc):
         """
         Parse the XML device definition file.
         """
