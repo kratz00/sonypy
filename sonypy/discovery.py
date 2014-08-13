@@ -56,18 +56,18 @@ class Discoverer(object):
                             socket.IP_MULTICAST_IF,
                             socket.inet_aton(ip))
 
-        for _ in xrange(2):
+        for _ in range(2):
             msg = discovery_msg % (SSDP_ADDR, SSDP_PORT, SSDP_MX)
-            sock.sendto(msg, (SSDP_ADDR, SSDP_PORT))
+            sock.sendto(msg.encode(), (SSDP_ADDR, SSDP_PORT))
 
         try:
-            data = sock.recv(1024)
+            data = sock.recv(1024).decode()
         except socket.timeout:
-            print "SOCKET TIMEOUT"
+            print('SOCKET TIMEOUT')
             pass
         else:
-            print "*****"
-            print data
+            print('*****')
+            print(data)
             yield self._parse_ssdp_response(data)
 
     def _parse_device_definition(self, doc):

@@ -1,6 +1,5 @@
 from setuptools import setup
 
-
 setup(name="sonypy",
       version='0.1',
       description='Remote Control of Sony Cameras',
@@ -10,6 +9,8 @@ setup(name="sonypy",
           'License :: OSI Approved :: MIT License',
           'Programming Language :: Python :: 2',
           'Programming Language :: Python :: 2.7',
+          'Programming Language :: Python :: 3',
+          'Programming Language :: Python :: 3.4'
       ],
       keywords='sony camera remote control a7 nex',
       url='http://github.com/storborg/sonypy',
