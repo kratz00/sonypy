@@ -271,20 +271,17 @@ class RawCamera(object):
 
     @staticmethod
     def _decode_payload_header(buf):
-        format = 'IBBBBIB'
-        buf = buf[:struct.calcsize(format)]
-        d = struct.unpack(format, buf)
-        start = d[0]
-        assert start == '\x24\x35\x68\x79', "payload start mismatch"
-        jpeg_size = struct.pack('I', [0] + d[1])
-        padding_size = d[2]
+        start = struct.unpack('>4s', buf[:4])[0]
+        assert start == '\x24\x35\x68\x79', 'payload start mismatch'
+        jpeg_size = struct.unpack('>I', '\x00' + buf[4:7])[0]
+        padding_size = struct.unpack('>B', buf[7:8])[0]
         return jpeg_size, padding_size
 
     def stream_liveview(self, url):
         """
         Connect to a liveview-format URL and yield a series of JPEG frames.
         """
-        r = requests.get(url)
+        r = requests.get(url, stream=True)
         while True:
             # Read common header, 8 bytes.
             seq, timestamp = self._decode_common_header(r.raw.read(8))
