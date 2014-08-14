@@ -265,11 +265,6 @@ class RawCamera(object):
         return self._do_request('getMethodTypes', version)
 
     @staticmethod
-    def _decode_common_header(buf):
-        start, ptype, seq, timestamp = struct.unpack('BBHI', buf)
-        return seq, timestamp
-
-    @staticmethod
     def _decode_payload_header(buf):
         start = struct.unpack('>4s', buf[:4])[0]
         assert start == '\x24\x35\x68\x79', 'payload start mismatch'
@@ -283,8 +278,8 @@ class RawCamera(object):
         """
         r = requests.get(url, stream=True)
         while True:
-            # Read common header, 8 bytes.
-            seq, timestamp = self._decode_common_header(r.raw.read(8))
+            # Throw away the common header, 8 bytes.
+            r.raw.read(8)
             # Read payload header, 128 bytes.
             jpeg_size, padding_size = \
                 self._decode_payload_header(r.raw.read(128))
