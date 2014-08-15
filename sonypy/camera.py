@@ -45,9 +45,10 @@ class RawCamera(object):
 
     def set_shoot_mode(self, mode):
         """
-        Set the shooting mode. Can be one of 'still', 'movie', or 'audio'.
+        Set the shooting mode. Can be one of 'still', 'movie', 'audio'
+        or 'intervalstill'.
         """
-        valid_modes = ('still', 'movie', 'audio')
+        valid_modes = ('still', 'movie', 'audio', 'intervalstill')
         if mode not in valid_modes:
             raise ValueError('mode must be one of {0!r}'.format(valid_modes))
         result = self._do_request('setShootMode', mode)
@@ -55,7 +56,8 @@ class RawCamera(object):
 
     def get_shoot_mode(self):
         """
-        Get the shooting mode. Will be one of 'still', 'movie', or 'audio'.
+        Get the shooting mode. Will be one of 'still', 'movie', 'audio'
+        or 'intervalstill'.
         """
         result = self._do_request('getShootMode')
         mode = result[0]
