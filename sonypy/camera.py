@@ -322,5 +322,5 @@ class Camera(RawCamera):
         """
         while True:
             liveview_url = self.await_take_picture()
-            r = requests.get(liveview_url)
-            yield r.body
+            r = requests.get(liveview_url[0])
+            yield r.content
