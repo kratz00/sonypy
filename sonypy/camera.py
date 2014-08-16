@@ -304,7 +304,16 @@ class Camera(RawCamera):
         remaps to a dict based on it's type value.
         """
         result = self.get_event(long_poll)
-        return {obj['type']: obj for obj in result}
+        objects = {}
+        for obj in result:
+            # skip list elements which are 'None' or empty lists
+            if obj:
+                # some list elements are lists with exactly one dict element
+                if isinstance(obj, list):
+                    assert len(obj) == 1
+                    obj = obj[0]
+                objects[obj['type']] = obj
+        return objects
 
     def tether(self):
         """
